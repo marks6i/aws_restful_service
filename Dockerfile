@@ -3,8 +3,19 @@ FROM python:3
 WORKDIR /usr/src/app
 # Install requirements
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && \
+    apt-get install -y openssh-server && \
+    mkdir -p /var/run/sshd && \
+    pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 22 8080
+
 # Install application
-COPY app.py ./
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+#COPY app.py ./
 # Run application
-CMD python app.py
+#CMD python app.py
+
+ENTRYPOINT ["docker-entrypoint.sh"]

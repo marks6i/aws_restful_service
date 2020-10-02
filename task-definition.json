@@ -5,17 +5,26 @@
     "inferenceAccelerators": [],
     "containerDefinitions": [
         {
-            "name": "ecs-devops-sandbox",
-            "image": "ecs-devops-sandbox-repository:00000",
             "resourceRequirements": null,
             "essential": true,
             "portMappings": [
                 {
-                    "containerPort": "8080",
+                    "containerPort": 8080,
+                    "protocol": "tcp"
+                },
+                {
+                    "containerPort": 22,
                     "protocol": "tcp"
                 }
-                
-            ]
+            ],
+            "secrets": [
+                {
+                    "valueFrom": "arn:aws:ssm:us-east-2:116961221102:parameter/SSH_PUBLIC_KEY",
+                    "name": "SSH_PUBLIC_KEY"
+                }
+            ],
+            "name": "ecs-devops-sandbox",
+            "image": "ecs-devops-sandbox-repository:latest"
         }
     ],
     "volumes": [],
